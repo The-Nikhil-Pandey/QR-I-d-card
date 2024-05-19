@@ -1,12 +1,22 @@
+"use client";
 import Image from "next/image";
 import React, { Fragment } from "react";
 import pic from "@/assets/student.svg";
 import { Card, Flex } from "antd";
 
 const Info = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const _id = queryParams.get("_id");
+  console.log("message", _id);
+
   return (
     <Fragment>
-      <Flex justify="center" gap={100} style={{ margin: "0 20px" }}>
+      <Flex
+        justify="center"
+        align="center"
+        gap={100}
+        style={{ margin: "0 20px" }}
+      >
         <Card style={{ width: "35%" }}>
           <Flex vertical justify="center" align="center">
             <Image src={pic} height={400} width={400} alt="" />
