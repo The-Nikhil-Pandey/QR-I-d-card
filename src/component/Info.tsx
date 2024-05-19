@@ -8,6 +8,13 @@ const Info = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _id = queryParams.get("_id");
   console.log("message", _id);
+  if (_id !== "12345") {
+    return (
+      <>
+        <h1>Bhaag ja yha se </h1>
+      </>
+    );
+  }
 
   return (
     <Fragment>
