@@ -61,7 +61,7 @@ const columns: TableProps<Post>["columns"] = [
     dataIndex: "_id",
     render: (_) => (
       <>
-        <QR _id={_._id} />
+        <QR _id={_} />
       </>
     ),
   },
