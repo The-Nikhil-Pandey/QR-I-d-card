@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Popover, QRCode, Space, Table, TableProps, Tag } from "antd";
 
 const downloadQRCode = () => {
@@ -24,63 +24,46 @@ interface DataType {
   _id: string;
 }
 
-const columns: TableProps<DataType>["columns"] = [
+interface Post {
+  name: number;
+  id: string;
+  type: string;
+}
+
+const columns: TableProps<Post>["columns"] = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
+    title: "First Name",
+    dataIndex: "firstName",
+    key: "firstName",
+    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: "Last Name",
+    dataIndex: "lastName",
+    key: "lastName",
     render: (text) => <a>{text}</a>,
   },
   {
     title: "Type",
     dataIndex: "type",
     key: "type",
+    render: (_, record) => <span>Student</span>,
   },
   {
     title: "_id",
     dataIndex: "_id",
     key: "_id",
   },
+
   {
     title: "QR code",
-    key: "qr",
-    dataIndex: "qr",
-    render: (_, record) => (
+    key: "_id",
+    dataIndex: "_id",
+    render: (_) => (
       <>
-        <QR _id={record._id} />
+        <QR _id={_._id} />
       </>
     ),
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
-
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    type: "admin",
-    _id: "utyfugihjok",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    type: "admin",
-    _id: "utyfugihjok",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    type: "admin",
-    _id: "utyfugihjok",
   },
 ];
 
@@ -104,9 +87,43 @@ const QR = ({ _id }: { _id: string }) => (
 );
 
 const AllData = () => {
+  const [data, setData] = useState<Post[] | null>(null);
+
+  useEffect(() => {
+    // Define the API endpoint
+    const url = "https://backend-qr-ruddy.vercel.app/students";
+
+    // Fetch data using the GET method
+    fetch(url)
+      .then((response) => {
+        // Check if the response is okay (status in the range 200-299)
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data: Post[]) => {
+        // Update the state with the fetched data
+        setData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.log(error);
+      });
+  }, []);
+
+  const data1: DataType[] = [
+    {
+      key: "",
+      name: "John Brown",
+      type: "admin",
+      _id: "utyfugihjok",
+    },
+  ];
   return (
     <>
-      <Table columns={columns} dataSource={data} pagination={false} />
+      <Table columns={columns} dataSource={data!} pagination={false} />
     </>
   );
 };
